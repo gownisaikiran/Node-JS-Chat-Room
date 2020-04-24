@@ -1,6 +1,6 @@
 var express = require('express');
 var socket = require('socket.io');
-// var mysql = require('mysql');
+
 var port = process.env.PORT;
 // App setup
 var app = express();
@@ -16,33 +16,8 @@ var io = socket(server);
 
 app.use(express.json());
 
-// DataBase Connection
-// var con = mysql.createConnection({
-//     host: "sql205.epizy.com",
-//     user: "epiz_25609731",
-//     password: "Hsvi@123",
-//     database : "epiz_25609731_chat_db"
-//   });
-  
-// con.connect(function(err) {
-// if (err) throw err;
-// console.log("Mysql Database Connected!");
-// });
-
-// API for getting Chat Messages
-// app.get('/api/messages',(req,res)=>{
-//     // const messages = [];
-//     var sql = "SELECT * FROM messages;";
-//         con.query(sql, function (err, result, fields) {
-//         if (err) throw err;
-//         res.send(result);
-//         });  
-        
-// })
-
-
 const users = {};
-io.on('connection', (socket) => {
+io.on('connection', (socket) => { 
 
     
     console.log('made socket connection ', socket.id);
@@ -67,12 +42,7 @@ io.on('connection', (socket) => {
 
     // Handle chat event
     socket.on('chat', (data) => {
-        // console.log(data);
-        // var sql = "INSERT INTO messages VALUES ('','msg','"+data.handle+"','"+data.message+"','"+data.time+"')";
-        // con.query(sql, function (err, result) {
-        //     if (err) throw err;
-        //     console.log("1 record inserted");
-        //   });
+        
         io.sockets.emit('chat', data);
     });
 

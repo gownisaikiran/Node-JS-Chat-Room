@@ -1,12 +1,12 @@
 // Make connection
-// var socket = io.connect('http://localhost:4000');
 var socket = io.connect();
-// if(!localStorage.name)
-// {
+
+do{
     var name = prompt("Please enter your name ?");
-    document.getElementById('handle').value =  name;
-    localStorage.setItem("name", name);
-// }
+}while(name == null || name == "" );
+    
+document.getElementById('handle').value =  name;
+
 
 // Query DOM
 var message = document.getElementById('message'),
@@ -27,6 +27,9 @@ socket.emit('new-user', {
 
 
 // Emit events
+if(message.value!="")
+{
+    console.log("Entered");
 btn.addEventListener('click', function(){
     var today = new Date();
     var time = today.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })
@@ -37,6 +40,7 @@ btn.addEventListener('click', function(){
     });
     message.value = "";
 });
+}
 
 message.addEventListener('keypress', function(){
     socket.emit('typing', handle.value);
@@ -46,9 +50,6 @@ message.addEventListener('keypress', function(){
 socket.on('chat', function(data){
     feedback.innerHTML = '';
     console.log(data.handle,handle.value);
-    // var today = new Date();
-    // // var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-    // var time = today.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })
     if(data.handle == handle.value)
     {
       output.innerHTML += '<div id="msg" style="margin-left: 60%;"><div style="font-size: 18px;font-family:sans-serif;padding: 5px 0px;">'+data.message+'</div><div id="chat-time">'+data.time+'</div></div><br>';
@@ -92,22 +93,3 @@ socket.on('user-disconnected', function(data){
     output.innerHTML += '<p style="text-align: center;"><strong>'+data.name+' left the Chat</strong></p>';
 });
 
-
-// $(document).ready(function(){
-//     $.ajax({url: "./api/messages", 
-//     success: function(result)
-//     {
-//         console.log(result.length);
-//         console.log(result[0].time);
-//         for (index = 0; index < result.length; index++) {
-//             if(result[index].name == handle.value)
-//             {
-//                 output.innerHTML += '<div id="msg" style="margin-left: 60%;"><div style="font-size: 18px;font-family:sans-serif;padding: 5px 0px;">'+result[index].message+'</div><div id="chat-time">'+result[index].time+'</div></div><br>'; 
-//             }
-//             else{
-//                 output.innerHTML += '<div id="msg"><strong>'+result[index].name+': </strong><br><div style="font-size: 18px;font-family:sans-serif;padding: 5px 0px;">'+result[index].message+'</div><div id="chat-time">'+result[index].time+'</div></div><br>';   
-//             }
-//         }
-//     }
-//     });
-// });
